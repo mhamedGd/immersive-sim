@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Sandbox/TestLevel.gd" type="Script" id=2]
+[ext_resource path="res://Sandbox/test_mat.tres" type="Material" id=3]
+
+[sub_resource type="PrismMesh" id=1]
+
+[sub_resource type="Environment" id=2]
+ambient_light_color = Color( 0.184314, 0.152941, 0.517647, 1 )
+ambient_light_energy = 1.5
+tonemap_mode = 1
+tonemap_white = 2.15
+ssao_radius = 11.97
+adjustment_enabled = true
+adjustment_brightness = 1.29
+adjustment_contrast = 0.78
+adjustment_saturation = 1.29
+
+[node name="TestLevel" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="."]
+use_collision = true
+
+[node name="CSGBox" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.375, 0 )
+width = 26.0
+height = 0.75
+depth = 15.0
+material = ExtResource( 3 )
+
+[node name="CSGBox2" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.625, 4 )
+width = 4.0
+height = 4.0
+material = ExtResource( 3 )
+
+[node name="CSGBox3" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0.145638, -4 )
+depth = 0.255758
+material = ExtResource( 3 )
+
+[node name="CSGMesh" type="CSGMesh" parent="CSGCombiner"]
+transform = Transform( 3.2, 0, 0, 0, 1, 0, 0, 0, 2.8, 3.02774, 1.01825, -0.0142069 )
+mesh = SubResource( 1 )
+material = ExtResource( 3 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4183, 0, -0.943913 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 0.917262, 0.28448, -0.278749, -0.170825, 0.913236, 0.36989, 0.35979, -0.291669, 0.886273, 0.784979, 0.753613, 0.640437 )
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
