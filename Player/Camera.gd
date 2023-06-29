@@ -1,8 +1,8 @@
 extends Camera
 
 
-export (float) var tension = 0.5
-export (float) var dampening = 0.1
+export (float) var tension = 0.6
+export (float) var dampening = 0.15
 
 var resting_position := Vector3.ZERO
 var spring_position := Vector3.ZERO
@@ -14,6 +14,8 @@ func apply_impulse(_impulse: Vector3):
 func _process(delta):
 	translation = spring_process(delta)
 
+func set_camera_resting_pos(new_resting_pos):
+	resting_position = new_resting_pos
 
 func spring_process(delta:float) -> Vector3:
 	var displacement:= (resting_position - spring_position) * delta

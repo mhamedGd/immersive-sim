@@ -32,8 +32,8 @@ const acceleration = 4.0
 const jump_height = 6.0
 const gravity = 9.0
 
-const standing_camera_height = 1.75
-const crouchng_camera_height = 1.0
+const standing_camera_height = 1.6
+const crouchng_camera_height = 0.9
 
 func apply_gravity(delta):
 	if not root_player.is_on_floor():
@@ -64,10 +64,11 @@ func check_mantle() -> bool:
 	var for_collision = direct_state.intersect_ray(root_player.global_transform.origin + Vector3.UP * ray_height, root_player.global_transform.origin + Vector3.UP * ray_height + root_player.global_transform.basis.z * mantle_distance, [root_player])
 	
 	if(for_collision):
-		var down_collision = direct_state.intersect_ray(for_collision.position + root_player.global_transform.basis.z * obstacle_in_depth + Vector3.UP * mantle_height, for_collision.position + root_player.global_transform.basis.z * obstacle_in_depth, [root_player])
+		var down_ray_pos : Vector3 = for_collision.position + root_player.global_transform.basis.z * obstacle_in_depth + Vector3.UP * mantle_height
+		var down_collision = direct_state.intersect_ray(down_ray_pos, for_collision.position + root_player.global_transform.basis.z * obstacle_in_depth, [root_player])
 		if(down_collision):
-			root_player.tracer.global_transform.origin  = down_collision.position
 			root_player.mantle_pos = down_collision.position
+			root_player.down_ray_pos = down_ray_pos
 			return true
 	
 	return false

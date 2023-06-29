@@ -23,7 +23,7 @@ func _on_state_physics(delta) -> void:
 
 func _on_state_exit() -> void:
 	end_air_height = root_player.global_transform.origin.y
-	root_player.camera.apply_impulse(Vector3.DOWN * falling_time * 0.13)
+	root_player.camera.apply_impulse(Vector3.DOWN * falling_time * 0.17)
 	falling_time = 0.0
 
 func get_state_enum():

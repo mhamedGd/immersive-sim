@@ -4,20 +4,32 @@ class_name MantleState
 var up_position : Vector3
 var for_position : Vector3
 
+var vault : bool = false
+var player_forward : Vector3
+
 func _on_state_enter() -> void:
 	print(GlobalDataBase.PLAYER_STATES.keys()[get_state_enum()])
 	root_player.velocity = Vector3.ZERO
 	
-	up_position = root_player.global_transform.origin + Vector3.UP * (abs(root_player.mantle_pos.y - root_player.global_transform.origin.y) + 0.05)
-	for_position = up_position + root_player.global_transform.basis.z * 1.25
+	player_forward = root_player.global_transform.basis.z
+	
+	var vault_collision = get_world().direct_space_state.intersect_ray(root_player.down_ray_pos + (player_forward * 0.5), root_player.down_ray_pos + (player_forward * 0.5) + (Vector3.DOWN * mantle_height), [root_player])
+
+	if vault_collision.empty():
+		up_position = root_player.global_transform.origin + player_forward * 2.0
+		for_position = root_player.global_transform.origin + player_forward * 2.0
+	else:
+		up_position = root_player.global_transform.origin + Vector3.UP * (abs(root_player.mantle_pos.y - root_player.global_transform.origin.y) + 0.05)
+		for_position = up_position + player_forward * 1.25
+	
 	current_target = up_position
 
 var current_target:Vector3
 func _on_state_update(delta) -> void:
 	root_player.global_transform.origin = lerp(root_player.global_transform.origin, current_target, 0.1)
-	if(root_player.global_transform.origin.distance_to(up_position) < 0.05):
+	if(root_player.global_transform.origin.distance_to(up_position) < 0.08):
 		current_target = for_position
-	if(root_player.global_transform.origin.distance_to(for_position) < 0.05):
+	if(root_player.global_transform.origin.distance_to(for_position) < 0.08):
 		emit_signal("change_state", GlobalDataBase.PLAYER_STATES.IDLE)
 
 func _on_state_physics(delta) -> void:
